@@ -1,149 +1,82 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const ORBIT_SPEED = 20; // degrees per second — same for all planets
 
 const CATEGORIES = [
   {
     id: "frontend",
     label: "Frontend",
     color: "#22d3ee",
-    orbitRadius: 160,
-    angle: 270,
+    offset: 0,
     skills: ["HTML", "CSS", "JavaScript", "React.js"],
-    description: "Crafting pixel-perfect, animated interfaces"
+    description: "Crafting pixel-perfect, animated interfaces",
   },
   {
     id: "backend",
     label: "Backend",
     color: "#a78bfa",
-    orbitRadius: 160,
-    angle: 342,
+    offset: 72,
     skills: ["Node.js", "Express.js", "Python"],
-    description: "Scalable server-side architectures & APIs"
+    description: "Scalable server-side architectures & APIs",
   },
   {
     id: "database",
     label: "Database",
     color: "#34d399",
-    orbitRadius: 160,
-    angle: 54,
+    offset: 144,
     skills: ["MySQL"],
-    description: "Relational data modeling & queries"
+    description: "Relational data modeling & queries",
   },
   {
     id: "languages",
     label: "Languages",
     color: "#fb923c",
-    orbitRadius: 160,
-    angle: 126,
+    offset: 216,
     skills: ["JavaScript", "Python", "C", "Java"],
-    description: "Multi-paradigm programming expertise"
+    description: "Multi-paradigm programming expertise",
   },
   {
     id: "tools",
     label: "AI & Tools",
     color: "#f472b6",
-    orbitRadius: 160,
-    angle: 198,
+    offset: 288,
     skills: ["Git", "GitHub", "VS Code"],
-    description: "Developer tools & version control workflows"
-  }
+    description: "Developer tools & version control workflows",
+  },
 ];
 
-function usePlanetPosition(
-  orbitRadius: number,
-  startAngle: number,
-  speed: number,
-  paused: boolean
-) {
-  const [angle, setAngle] = useState(startAngle);
-  const rafRef = useRef<number>(0);
-  const lastRef = useRef<number>(0);
-  const angleRef = useRef(startAngle);
-
-  useEffect(() => {
-    if (paused) {
-      cancelAnimationFrame(rafRef.current);
-      return;
-    }
-
-    const tick = (now: number) => {
-      const delta = now - (lastRef.current || now);
-      lastRef.current = now;
-      angleRef.current = (angleRef.current + speed * delta * 0.001) % 360;
-      setAngle(angleRef.current);
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [paused, speed]);
-
-  const rad = (angle * Math.PI) / 180;
-  return {
-    x: Math.cos(rad) * orbitRadius,
-    y: Math.sin(rad) * orbitRadius,
-  };
-}
-
-function Planet({
-  category,
-  speed,
-  isSelected,
-  paused,
-  onClick,
-  size,
-}: {
-  category: typeof CATEGORIES[0];
-  speed: number;
-  isSelected: boolean;
-  paused: boolean;
-  onClick: () => void;
-  size: number;
-}) {
-  const { x, y } = usePlanetPosition(
-    category.orbitRadius * (size / 350),
-    category.angle,
-    speed,
-    paused
-  );
-
-  return (
-    <motion.button
-      onClick={onClick}
-      style={{ left: size / 2 + x - 28, top: size / 2 + y - 28 }}
-      className="absolute w-14 h-14 rounded-full flex flex-col items-center justify-center cursor-pointer group z-10 focus:outline-none"
-      whileHover={{ scale: 1.2 }}
-      whileTap={{ scale: 0.95 }}
-      animate={isSelected ? { scale: 1.25 } : { scale: 1 }}
-    >
-      <div
-        className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300"
-        style={{
-          backgroundColor: isSelected
-            ? category.color
-            : `${category.color}22`,
-          border: `2px solid ${category.color}`,
-          boxShadow: isSelected
-            ? `0 0 20px ${category.color}88, 0 0 40px ${category.color}44`
-            : `0 0 10px ${category.color}44`,
-        }}
-      >
-        <span
-          className="text-[9px] font-mono font-bold text-center leading-tight px-1"
-          style={{ color: isSelected ? "#000" : category.color }}
-        >
-          {category.label.toUpperCase()}
-        </span>
-      </div>
-    </motion.button>
-  );
-}
-
 export function Skills() {
+  const [baseAngle, setBaseAngle] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [containerSize, setContainerSize] = useState(350);
   const containerRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
+  const lastRef = useRef<number>(0);
+  const angleRef = useRef(0);
+  const pausedRef = useRef(false);
 
+  // Keep paused ref in sync
+  useEffect(() => {
+    pausedRef.current = selected !== null;
+  }, [selected]);
+
+  // Single shared RAF loop — all planets get the same base angle
+  useEffect(() => {
+    const tick = (now: number) => {
+      const delta = now - (lastRef.current || now);
+      lastRef.current = now;
+      if (!pausedRef.current) {
+        angleRef.current = (angleRef.current + ORBIT_SPEED * delta * 0.001) % 360;
+        setBaseAngle(angleRef.current);
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  // Responsive container size
   useEffect(() => {
     const update = () => {
       if (containerRef.current) {
@@ -156,15 +89,27 @@ export function Skills() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  const selectedCat = CATEGORIES.find((c) => c.id === selected);
+  const orbitRadius = containerSize * 0.42;
+
+  const getPlanetPos = useCallback(
+    (offsetDeg: number) => {
+      const deg = ((baseAngle + offsetDeg) * Math.PI) / 180;
+      return {
+        x: containerSize / 2 + Math.cos(deg) * orbitRadius - 28,
+        y: containerSize / 2 + Math.sin(deg) * orbitRadius - 28,
+      };
+    },
+    [baseAngle, containerSize, orbitRadius]
+  );
 
   const handleClick = (id: string) => {
     setSelected((prev) => (prev === id ? null : id));
   };
 
+  const selectedCat = CATEGORIES.find((c) => c.id === selected);
+
   return (
     <section id="skills" className="py-32 relative overflow-hidden">
-      {/* subtle bg glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
       </div>
@@ -178,9 +123,7 @@ export function Skills() {
         >
           <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-2">TECH ARSENAL</h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-4" />
-          <p className="text-muted-foreground text-sm">
-            Click a planet to explore the skill set
-          </p>
+          <p className="text-muted-foreground text-sm">Click a planet to explore the skill set</p>
         </motion.div>
 
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 mt-10">
@@ -194,29 +137,29 @@ export function Skills() {
             className="relative flex-shrink-0"
             style={{ width: containerSize, height: containerSize }}
           >
-            {/* Orbit rings */}
+            {/* Orbit ring */}
             <div
               className="absolute rounded-full border border-white/5"
               style={{
-                width: (containerSize * 0.92),
-                height: (containerSize * 0.92),
-                left: (containerSize * 0.04),
-                top: (containerSize * 0.04),
+                width: orbitRadius * 2,
+                height: orbitRadius * 2,
+                left: containerSize / 2 - orbitRadius,
+                top: containerSize / 2 - orbitRadius,
               }}
             />
 
-            {/* Sun / Center */}
+            {/* Sun */}
             <div
               className="absolute rounded-full flex items-center justify-center z-20"
               style={{
-                width: 80,
-                height: 80,
-                left: containerSize / 2 - 40,
-                top: containerSize / 2 - 40,
+                width: 76,
+                height: 76,
+                left: containerSize / 2 - 38,
+                top: containerSize / 2 - 38,
                 background:
                   "radial-gradient(circle, hsl(191 97% 75%) 0%, hsl(191 97% 45%) 60%, hsl(191 97% 25%) 100%)",
                 boxShadow:
-                  "0 0 30px hsl(191 97% 65% / 0.8), 0 0 60px hsl(191 97% 65% / 0.4), 0 0 100px hsl(191 97% 65% / 0.2)",
+                  "0 0 28px hsl(191 97% 65% / 0.8), 0 0 56px hsl(191 97% 65% / 0.4), 0 0 90px hsl(191 97% 65% / 0.2)",
               }}
             >
               <span className="font-mono text-[10px] font-black text-background text-center leading-tight">
@@ -224,18 +167,41 @@ export function Skills() {
               </span>
             </div>
 
-            {/* Planets */}
-            {CATEGORIES.map((cat, i) => (
-              <Planet
-                key={cat.id}
-                category={cat}
-                speed={7 + i * 1.5}
-                isSelected={selected === cat.id}
-                paused={selected !== null}
-                onClick={() => handleClick(cat.id)}
-                size={containerSize}
-              />
-            ))}
+            {/* Planets — all use the same baseAngle + their own offset */}
+            {CATEGORIES.map((cat) => {
+              const pos = getPlanetPos(cat.offset);
+              const isSelected = selected === cat.id;
+
+              return (
+                <motion.button
+                  key={cat.id}
+                  onClick={() => handleClick(cat.id)}
+                  className="absolute w-14 h-14 flex items-center justify-center focus:outline-none z-10"
+                  style={{ left: pos.x, top: pos.y }}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.92 }}
+                  animate={{ scale: isSelected ? 1.25 : 1 }}
+                >
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+                    style={{
+                      backgroundColor: isSelected ? cat.color : `${cat.color}22`,
+                      border: `2px solid ${cat.color}`,
+                      boxShadow: isSelected
+                        ? `0 0 20px ${cat.color}99, 0 0 40px ${cat.color}44`
+                        : `0 0 10px ${cat.color}44`,
+                    }}
+                  >
+                    <span
+                      className="text-[8px] font-mono font-bold text-center leading-tight px-1"
+                      style={{ color: isSelected ? "#000" : cat.color }}
+                    >
+                      {cat.label.toUpperCase()}
+                    </span>
+                  </div>
+                </motion.button>
+              );
+            })}
           </motion.div>
 
           {/* Skills Panel */}
@@ -247,7 +213,7 @@ export function Skills() {
                   initial={{ opacity: 0, x: 30, scale: 0.95 }}
                   animate={{ opacity: 1, x: 0, scale: 1 }}
                   exit={{ opacity: 0, x: -30, scale: 0.95 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.28 }}
                   className="w-full"
                 >
                   <div
@@ -287,7 +253,7 @@ export function Skills() {
                           key={skill}
                           initial={{ opacity: 0, y: 12 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.06 }}
+                          transition={{ delay: i * 0.07 }}
                           className="px-5 py-3 rounded-xl font-mono font-bold text-sm"
                           style={{
                             backgroundColor: `${selectedCat.color}18`,
