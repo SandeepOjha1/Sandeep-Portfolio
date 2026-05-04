@@ -14,3 +14,32 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Store a contact form message
+ * @summary Submit contact form
+ */
+export const submitContactBodyNameMax = 100;
+
+export const submitContactBodyMessageMax = 2000;
+
+export const SubmitContactBody = zod.object({
+  name: zod.string().min(1).max(submitContactBodyNameMax),
+  email: zod.string().email(),
+  message: zod.string().min(1).max(submitContactBodyMessageMax),
+});
+
+/**
+ * Retrieve all stored contact form messages
+ * @summary Get all contact messages
+ */
+export const GetContactMessagesResponseItem = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  email: zod.string(),
+  message: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const GetContactMessagesResponse = zod.array(
+  GetContactMessagesResponseItem,
+);

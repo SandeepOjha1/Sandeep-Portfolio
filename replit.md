@@ -16,6 +16,35 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### Personal Portfolio (`artifacts/portfolio`)
+
+- **Type**: React + Vite (react-vite)
+- **Preview path**: `/`
+- **Stack**: React, TypeScript, Tailwind CSS, Framer Motion, react-icons
+- **Features**:
+  - Dark-mode single-page portfolio with smooth scroll navigation
+  - Hero section with AI-generated profile image, animated background
+  - About, Skills (with animated progress bars), Projects (card grid with hover effects)
+  - Resume with timeline (work experience + education)
+  - Contact form (wired to backend API, stores messages in PostgreSQL)
+  - Footer with social links
+- **Fonts**: Outfit (sans), Space Mono (mono)
+- **Color**: Electric Cyan primary (`hsl(191 97% 65%)`) on deep navy-black background
+
+### API Server (`artifacts/api-server`)
+
+- **Preview path**: `/api`
+- **Routes**:
+  - `GET /api/healthz` — health check
+  - `POST /api/contact` — submit contact form message (stored in DB)
+  - `GET /api/contact/messages` — retrieve all contact messages
+
+## Database Schema
+
+- **`contact_messages`**: id, name, email, message, createdAt
+
 ## Key Commands
 
 - `pnpm run typecheck` — full typecheck across all packages

@@ -1,0 +1,167 @@
+Act as a senior full-stack web developer and UI/UX designer.
+
+Your task is to build a complete, modern, professional personal portfolio website that showcases skills, projects, and a professional profile.
+
+🔹 Tech Stack Requirements:
+
+Frontend: React.js (with functional components and hooks)
+
+Styling: Tailwind CSS (preferred) OR modern CSS with animations
+
+Backend: Node.js with Express (for contact form handling)
+
+Database: MongoDB (for storing contact form messages)
+
+Deployment-ready structure
+
+🔹 Design Requirements:
+
+Clean, minimal, premium design (like a high-end developer portfolio)
+
+Smooth animations (Framer Motion if needed)
+
+Fully responsive (mobile, tablet, desktop)
+
+Use modern UI principles: spacing, typography, hierarchy
+
+Color palette: professional (dark mode preferred)
+
+Sections should feel like “cards” or “panels” with soft shadows and rounded corners
+
+🔹 Pages / Sections Required:
+
+Hero Section
+
+Name, role (e.g., Full Stack Developer)
+
+Short intro tagline
+
+CTA buttons (View Projects, Contact Me)
+
+Profile image or illustration
+
+About Section
+
+Brief introduction
+
+Skills summary
+
+Career goal
+
+Skills Section
+
+Categorized skills:
+
+Frontend (HTML, CSS, JS, React)
+
+Backend (Node.js)
+
+Database (MongoDB/MySQL)
+
+Languages (Python, Java, C, etc.)
+
+Use progress bars or icons
+
+Projects Section
+
+Display 4–6 projects
+
+Each project includes:
+
+Title
+
+Description
+
+Tech stack
+
+GitHub link
+
+Live demo link
+
+Use cards with hover effects
+
+Resume Section
+
+Download resume button
+
+Timeline-style education & experience
+
+Contact Section
+
+Contact form (Name, Email, Message)
+
+Backend API to store messages in MongoDB
+
+Email notification (use Nodemailer)
+
+Footer
+
+Social links (GitHub, LinkedIn, etc.)
+
+Copyright
+
+🔹 Backend Requirements:
+
+Create Express server
+
+API endpoint: POST /contact
+
+Validate input
+
+Store data in MongoDB
+
+Send email notification using Nodemailer
+
+🔹 SEO Optimization:
+
+Proper meta tags
+
+Semantic HTML
+
+Fast loading
+
+Optimized images
+
+🔹 Extra Features (IMPORTANT):
+
+Dark/Light mode toggle
+
+Smooth scrolling navigation
+
+Loading animations
+
+Scroll reveal effects
+
+Sticky navbar
+
+Mobile hamburger menu
+
+🔹 Code Requirements:
+
+Clean, modular folder structure
+
+Commented code
+
+Use best practices
+
+Separate frontend and backend folders
+
+🔹 Output Format:
+
+Folder structure
+
+Frontend code (React components)
+
+Backend code (Node.js + Express)
+
+MongoDB schema
+
+Setup instructions
+
+Deployment steps (Vercel for frontend, Render/Node server for backend)
+
+
+Note: Make sure to add the best animations as much as possible everywhere.
+
+
+Make sure everything is complete, working, and ready to run without missing dependencies.

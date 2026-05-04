@@ -1,0 +1,32 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "cpkNXFwHA5sRl--FNii7e"
+uri = "file://artifacts/portfolio/public/avatar.png"
+type = "image"
+title = "Developer cinematic neon portrait"
+
+[[generated]]
+id = "cYsY58GW5FjxlZ3o_D8Dm"
+uri = "file://artifacts/portfolio/public/project1.png"
+type = "image"
+title = "Fintech dashboard dark mode"
+
+[[generated]]
+id = "qdl0gjvdiqEog5QFyvNiR"
+uri = "file://artifacts/portfolio/public/project2.png"
+type = "image"
+title = "E-commerce web app dark mode"
+
+[[generated]]
+id = "imA5qBsx-GdyL0PViZFVA"
+uri = "file://artifacts/portfolio/public/project3.png"
+type = "image"
+title = "Data visualization dark mode"
+
+[[generated]]
+id = "NN6Lkzm8VPKsw5cynGzmA"
+uri = "file://artifacts/portfolio/public/project4.png"
+type = "image"
+title = "AI chat interface dark mode"
