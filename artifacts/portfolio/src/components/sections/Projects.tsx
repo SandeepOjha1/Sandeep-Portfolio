@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
+import { useMagnet } from "@/hooks/useMagnet";
 
 const PROJECTS = [
   {
@@ -52,7 +53,8 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-700 scale-100 hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700"
+              style={{ transform: flipped ? "scale(1)" : "scale(1.05)" }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
             <div
@@ -135,29 +137,7 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
               ))}
             </div>
 
-            <div className="flex items-center gap-6 pt-4 border-t border-white/5">
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm font-bold transition-all hover:gap-3"
-                style={{ color: project.accent }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ExternalLink size={15} />
-                LIVE DEMO
-              </a>
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-all hover:gap-3"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Github size={15} />
-                SOURCE
-              </a>
-            </div>
+            <LinkRow project={project} />
           </div>
         </div>
       </motion.div>
@@ -165,10 +145,45 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
   );
 }
 
+function LinkRow({ project }: { project: typeof PROJECTS[0] }) {
+  const demoMagnet = useMagnet(0.4);
+  const srcMagnet = useMagnet(0.4);
+  return (
+    <div className="flex items-center gap-6 pt-4 border-t border-white/5">
+      <a
+        ref={demoMagnet.ref as React.RefObject<HTMLAnchorElement>}
+        onMouseMove={demoMagnet.onMouseMove as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+        onMouseLeave={demoMagnet.onMouseLeave}
+        href={project.demo}
+        target="_blank"
+        rel="noreferrer"
+        className="flex items-center gap-2 text-sm font-bold transition-all"
+        style={{ color: project.accent }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <ExternalLink size={15} />
+        LIVE DEMO
+      </a>
+      <a
+        ref={srcMagnet.ref as React.RefObject<HTMLAnchorElement>}
+        onMouseMove={srcMagnet.onMouseMove as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+        onMouseLeave={srcMagnet.onMouseLeave}
+        href={project.github}
+        target="_blank"
+        rel="noreferrer"
+        className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-all"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Github size={15} />
+        SOURCE
+      </a>
+    </div>
+  );
+}
+
 export function Projects() {
   return (
     <section id="projects" className="py-32 relative overflow-hidden">
-      {/* Background accent */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
@@ -199,7 +214,6 @@ export function Projects() {
           ))}
         </div>
 
-        {/* Stats row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -212,10 +226,14 @@ export function Projects() {
             { value: "1", label: "Happy Client", color: "#a78bfa" },
             { value: "Fresher", label: "Experience Level", color: "#34d399" },
           ].map(({ value, label, color }) => (
-            <div key={label} className="text-center">
+            <motion.div
+              key={label}
+              whileHover={{ scale: 1.1, y: -4 }}
+              className="text-center cursor-default"
+            >
               <div className="text-4xl font-black" style={{ color }}>{value}</div>
               <div className="text-xs font-mono text-muted-foreground uppercase tracking-widest mt-1">{label}</div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       </div>
