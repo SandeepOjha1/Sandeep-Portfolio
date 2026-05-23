@@ -4,41 +4,23 @@ import { ExternalLink, Github } from "lucide-react";
 
 const PROJECTS = [
   {
-    title: "Fintech Dashboard",
-    description: "A dark-mode analytics dashboard for real-time cryptocurrency tracking. Built with React, Recharts, and WebSockets for live price feeds and portfolio visualization.",
+    title: "Vanguard CRM",
+    description: "A full-stack CRM platform for managing client relationships, leads, and sales pipelines. Features a dark-mode dashboard, real-time data updates, authentication, and a clean intuitive interface built for modern businesses.",
     image: "/project1.png",
-    tags: ["React", "TypeScript", "Tailwind", "WebSockets"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    accent: "#22d3ee"
+    tags: ["React", "Node.js", "Express", "MongoDB"],
+    github: "https://github.com/SandeepOjha1/Vanguard-CRM",
+    demo: "https://client-flow-manager--sandeepojha651.replit.app/",
+    accent: "#22d3ee",
   },
   {
-    title: "E-Commerce Platform",
-    description: "High-performance headless e-commerce front-end with an immersive dark aesthetic, seamless cart interactions, and Stripe-powered checkout built on Next.js.",
+    title: "La-Maison-Dorée",
+    description: "An elegant asset management web application with a luxurious UI/UX design. Allows users to track, organize, and manage their digital and physical assets with a premium dark aesthetic and smooth interactions.",
     image: "/project2.png",
-    tags: ["Next.js", "Zustand", "Stripe", "Framer Motion"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    accent: "#a78bfa"
+    tags: ["React", "TypeScript", "Tailwind", "Node.js"],
+    github: "https://github.com/SandeepOjha1/La-Maison-Dor-e",
+    demo: "https://asset-manager--sandeepojha040.replit.app/",
+    accent: "#a78bfa",
   },
-  {
-    title: "Data Visualization Tool",
-    description: "Interactive node-based data visualization platform for analyzing complex datasets with WebGL rendering. Supports drag-and-drop pipeline building.",
-    image: "/project3.png",
-    tags: ["React", "Three.js", "D3", "Node.js"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    accent: "#34d399"
-  },
-  {
-    title: "AI Chat Interface",
-    description: "Futuristic conversational UI for interacting with large language models. Features streaming responses, markdown rendering, and persistent conversation history.",
-    image: "/project4.png",
-    tags: ["TypeScript", "OpenAI", "Tailwind", "Radix UI"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    accent: "#fb923c"
-  }
 ];
 
 function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }) {
@@ -46,48 +28,51 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: idx * 0.1 }}
-      className="relative h-80"
+      transition={{ duration: 0.7, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      className="relative h-96"
       style={{ perspective: "1200px" }}
       onMouseEnter={() => setFlipped(true)}
       onMouseLeave={() => setFlipped(false)}
     >
-      {/* Card wrapper with 3D flip */}
       <motion.div
         className="relative w-full h-full"
         style={{ transformStyle: "preserve-3d" }}
         animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.55, ease: [0.23, 1, 0.32, 1] }}
+        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
       >
         {/* FRONT */}
         <div
           className="absolute inset-0 rounded-2xl overflow-hidden border border-white/5"
           style={{ backfaceVisibility: "hidden" }}
         >
-          {/* Image */}
           <div className="absolute inset-0">
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-700 scale-100 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                background: `radial-gradient(circle at bottom left, ${project.accent}33, transparent 60%)`,
+              }}
+            />
           </div>
 
-          {/* Front content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-xl font-black mb-3">{project.title}</h3>
+          <div className="absolute bottom-0 left-0 right-0 p-7">
+            <h3 className="text-2xl font-black mb-3">{project.title}</h3>
             <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs font-mono px-2.5 py-1 rounded-full"
+                  className="text-xs font-mono px-3 py-1 rounded-full"
                   style={{
                     backgroundColor: `${project.accent}20`,
-                    border: `1px solid ${project.accent}40`,
+                    border: `1px solid ${project.accent}50`,
                     color: project.accent,
                   }}
                 >
@@ -97,7 +82,6 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
             </div>
           </div>
 
-          {/* Hover hint */}
           <div className="absolute top-4 right-4 text-xs font-mono text-white/40 bg-black/30 px-2 py-1 rounded-md backdrop-blur-sm">
             hover to flip
           </div>
@@ -105,39 +89,41 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
 
         {/* BACK */}
         <div
-          className="absolute inset-0 rounded-2xl border flex flex-col justify-between p-7"
+          className="absolute inset-0 rounded-2xl border flex flex-col justify-between p-8"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
-            backgroundColor: "hsl(222 47% 6%)",
-            borderColor: `${project.accent}33`,
-            boxShadow: `0 0 30px ${project.accent}22, inset 0 0 40px ${project.accent}08`,
+            backgroundColor: "hsl(222 47% 5%)",
+            borderColor: `${project.accent}44`,
+            boxShadow: `0 0 40px ${project.accent}22, inset 0 0 60px ${project.accent}08`,
           }}
         >
-          {/* Accent bar */}
           <div
-            className="absolute top-0 left-6 right-6 h-0.5 rounded-full"
-            style={{ backgroundColor: project.accent }}
+            className="absolute top-0 left-8 right-8 h-px rounded-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${project.accent}, transparent)`,
+            }}
+          />
+          <div
+            className="absolute bottom-0 left-8 right-8 h-px rounded-full opacity-50"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${project.accent}, transparent)`,
+            }}
           />
 
           <div>
-            <h3
-              className="text-xl font-black mb-4"
-              style={{ color: project.accent }}
-            >
+            <h3 className="text-2xl font-black mb-4" style={{ color: project.accent }}>
               {project.title}
             </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {project.description}
-            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{project.description}</p>
           </div>
 
           <div>
-            <div className="flex flex-wrap gap-2 mb-5">
+            <div className="flex flex-wrap gap-2 mb-6">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs font-mono px-2.5 py-1 rounded-full"
+                  className="text-xs font-mono px-3 py-1 rounded-full"
                   style={{
                     backgroundColor: `${project.accent}15`,
                     border: `1px solid ${project.accent}30`,
@@ -149,12 +135,12 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
               ))}
             </div>
 
-            <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+            <div className="flex items-center gap-6 pt-4 border-t border-white/5">
               <a
                 href={project.demo}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 text-sm font-bold transition-colors"
+                className="flex items-center gap-2 text-sm font-bold transition-all hover:gap-3"
                 style={{ color: project.accent }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -165,7 +151,7 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
                 href={project.github}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-all hover:gap-3"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Github size={15} />
@@ -181,8 +167,16 @@ function FlipCard({ project, idx }: { project: typeof PROJECTS[0]; idx: number }
 
 export function Projects() {
   return (
-    <section id="projects" className="py-32 relative bg-card/30 border-y border-white/5">
-      <div className="container px-4 md:px-8 mx-auto">
+    <section id="projects" className="py-32 relative overflow-hidden">
+      {/* Background accent */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[120px] -translate-y-1/2" />
+        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-violet-500/5 rounded-full blur-[120px] -translate-y-1/2" />
+      </div>
+
+      <div className="container px-4 md:px-8 mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -190,19 +184,40 @@ export function Projects() {
           className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
         >
           <div>
+            <p className="text-xs font-mono text-primary tracking-widest uppercase mb-3">Portfolio</p>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">SELECTED WORKS</h2>
             <div className="w-20 h-1 bg-primary" />
           </div>
-          <p className="text-muted-foreground max-w-md text-sm md:text-base">
-            Hover over a card to reveal full project details, tech stack, and links.
+          <p className="text-muted-foreground max-w-sm text-sm">
+            Hover over a card to reveal the full project details, tech stack, and links.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {PROJECTS.map((project, idx) => (
             <FlipCard key={project.title} project={project} idx={idx} />
           ))}
         </div>
+
+        {/* Stats row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="flex flex-wrap justify-center gap-8 mt-20"
+        >
+          {[
+            { value: "2", label: "Projects Built", color: "#22d3ee" },
+            { value: "1", label: "Happy Client", color: "#a78bfa" },
+            { value: "Fresher", label: "Experience Level", color: "#34d399" },
+          ].map(({ value, label, color }) => (
+            <div key={label} className="text-center">
+              <div className="text-4xl font-black" style={{ color }}>{value}</div>
+              <div className="text-xs font-mono text-muted-foreground uppercase tracking-widest mt-1">{label}</div>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
