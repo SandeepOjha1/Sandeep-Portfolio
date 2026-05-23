@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const ORBIT_SPEED = 20; // degrees per second — same for all planets
+const ORBIT_SPEED = 20;
 
 const CATEGORIES = [
   {
@@ -9,7 +9,7 @@ const CATEGORIES = [
     label: "Frontend",
     color: "#22d3ee",
     offset: 0,
-    skills: ["HTML", "CSS", "JavaScript", "React.js"],
+    skills: ["HTML", "CSS", "JavaScript", "TypeScript", "React.js"],
     description: "Crafting pixel-perfect, animated interfaces",
   },
   {
@@ -17,7 +17,7 @@ const CATEGORIES = [
     label: "Backend",
     color: "#a78bfa",
     offset: 72,
-    skills: ["Node.js", "Express.js", "Python"],
+    skills: ["Node.js", "Express.js", "Python", "MongoDB"],
     description: "Scalable server-side architectures & APIs",
   },
   {
@@ -25,15 +25,15 @@ const CATEGORIES = [
     label: "Database",
     color: "#34d399",
     offset: 144,
-    skills: ["MySQL"],
-    description: "Relational data modeling & queries",
+    skills: ["MySQL", "MongoDB"],
+    description: "Relational & NoSQL data modeling",
   },
   {
     id: "languages",
     label: "Languages",
     color: "#fb923c",
     offset: 216,
-    skills: ["JavaScript", "Python", "C", "Java"],
+    skills: ["JavaScript", "TypeScript", "Python", "C", "Java"],
     description: "Multi-paradigm programming expertise",
   },
   {
@@ -41,8 +41,8 @@ const CATEGORIES = [
     label: "AI & Tools",
     color: "#f472b6",
     offset: 288,
-    skills: ["Git", "GitHub", "VS Code"],
-    description: "Developer tools & version control workflows",
+    skills: ["Git", "GitHub", "VS Code", "Cursor"],
+    description: "Developer tools & AI-powered workflows",
   },
 ];
 
@@ -56,12 +56,10 @@ export function Skills() {
   const angleRef = useRef(0);
   const pausedRef = useRef(false);
 
-  // Keep paused ref in sync
   useEffect(() => {
     pausedRef.current = selected !== null;
   }, [selected]);
 
-  // Single shared RAF loop — all planets get the same base angle
   useEffect(() => {
     const tick = (now: number) => {
       const delta = now - (lastRef.current || now);
@@ -76,7 +74,6 @@ export function Skills() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  // Responsive container size
   useEffect(() => {
     const update = () => {
       if (containerRef.current) {
@@ -102,16 +99,13 @@ export function Skills() {
     [baseAngle, containerSize, orbitRadius]
   );
 
-  const handleClick = (id: string) => {
-    setSelected((prev) => (prev === id ? null : id));
-  };
-
+  const handleClick = (id: string) => setSelected((prev) => (prev === id ? null : id));
   const selectedCat = CATEGORIES.find((c) => c.id === selected);
 
   return (
     <section id="skills" className="py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[130px]" />
       </div>
 
       <div className="container px-4 md:px-8 mx-auto relative z-10">
@@ -121,6 +115,7 @@ export function Skills() {
           viewport={{ once: true }}
           className="text-center mb-4"
         >
+          <p className="text-xs font-mono text-primary tracking-widest uppercase mb-3">Technologies</p>
           <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-2">TECH ARSENAL</h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-4" />
           <p className="text-muted-foreground text-sm">Click a planet to explore the skill set</p>
@@ -167,11 +162,10 @@ export function Skills() {
               </span>
             </div>
 
-            {/* Planets — all use the same baseAngle + their own offset */}
+            {/* Planets */}
             {CATEGORIES.map((cat) => {
               const pos = getPlanetPos(cat.offset);
               const isSelected = selected === cat.id;
-
               return (
                 <motion.button
                   key={cat.id}
@@ -229,21 +223,13 @@ export function Skills() {
                           boxShadow: `0 0 16px ${selectedCat.color}55`,
                         }}
                       >
-                        <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: selectedCat.color }}
-                        />
+                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: selectedCat.color }} />
                       </div>
                       <div>
-                        <h3
-                          className="text-2xl font-black tracking-tight"
-                          style={{ color: selectedCat.color }}
-                        >
+                        <h3 className="text-2xl font-black tracking-tight" style={{ color: selectedCat.color }}>
                           {selectedCat.label.toUpperCase()}
                         </h3>
-                        <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                          {selectedCat.description}
-                        </p>
+                        <p className="text-xs text-muted-foreground font-mono mt-0.5">{selectedCat.description}</p>
                       </div>
                     </div>
 

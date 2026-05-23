@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Terminal } from "lucide-react";
+import { Menu, X, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
-  { href: "#resume", label: "Resume" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -17,9 +15,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -43,16 +39,16 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-        <a 
-          href="#home" 
+        <a
+          href="#home"
           onClick={(e) => handleNavClick(e, "#home")}
           className="flex items-center gap-2 group"
         >
           <div className="bg-primary/10 text-primary p-2 rounded-lg group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-            <Terminal size={24} />
+            <Code2 size={22} />
           </div>
-          <span className="font-mono font-bold text-xl tracking-tighter hidden sm:block">
-            DEV<span className="text-primary">.STUDIO</span>
+          <span className="font-mono font-bold text-lg tracking-tighter hidden sm:block">
+            Sandeep<span className="text-primary">.Ojha</span>
           </span>
         </a>
 
@@ -72,16 +68,16 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="border-primary/20 hover:border-primary hover:bg-primary/10 font-mono"
-            onClick={(e) => handleNavClick(e, "#contact")}
+            onClick={(e) => handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, "#contact")}
           >
             LET'S TALK
           </Button>
         </nav>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Toggle */}
         <button
           className="md:hidden text-foreground p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -1,17 +1,15 @@
-import { Github, Linkedin, Twitter, Mail, Terminal } from "lucide-react";
+import { Github, Linkedin, Mail, Code2 } from "lucide-react";
 
 const SOCIAL_LINKS = [
-  { icon: Github, href: "https://github.com", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-  { icon: Mail, href: "mailto:hello@devstudio.io", label: "Email" },
+  { icon: Github, href: "https://github.com/SandeepOjha1", label: "GitHub" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/sandeep-ojha-185557317", label: "LinkedIn" },
+  { icon: Mail, href: "mailto:sandeepojha028@gmail.com", label: "Email" },
 ];
 
 const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
-  { href: "#resume", label: "Resume" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -32,10 +30,10 @@ export function Footer() {
           {/* Brand */}
           <a href="#home" onClick={(e) => handleNavClick(e, "#home")} className="flex items-center gap-2 group">
             <div className="bg-primary/10 text-primary p-2 rounded-lg group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-              <Terminal size={20} />
+              <Code2 size={20} />
             </div>
             <span className="font-mono font-bold text-lg tracking-tighter">
-              DEV<span className="text-primary">.STUDIO</span>
+              Sandeep<span className="text-primary">.Ojha</span>
             </span>
           </a>
 
@@ -56,7 +54,7 @@ export function Footer() {
             </ul>
           </nav>
 
-          {/* Social Links */}
+          {/* Social */}
           <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
               <a
@@ -75,7 +73,7 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs font-mono text-muted-foreground">
-            &copy; {new Date().getFullYear()} DEV.STUDIO. All rights reserved.
+            &copy; {new Date().getFullYear()} Sandeep Ojha. All rights reserved.
           </p>
           <p className="text-xs font-mono text-muted-foreground">
             Built with <span className="text-primary">React</span> &middot; <span className="text-primary">TypeScript</span> &middot; <span className="text-primary">Tailwind CSS</span>
