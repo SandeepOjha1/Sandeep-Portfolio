@@ -3,7 +3,7 @@ import { GraduationCap, Briefcase, Calendar, MapPin } from "lucide-react";
 
 const EXPERIENCE = [
   {
-    role: "Intern Developer",
+    role: "Full Stack Developer",
     company: "Future Interns",
     period: "April 2024 — May 2024",
     desc: "Gained hands-on experience building real-world web applications, contributing to frontend and backend features. Collaborated with the team on project development, debugging, and shipping features to production.",
